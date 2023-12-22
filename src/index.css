@@ -24,3 +24,11 @@ table, tr,th, td{
   border: 1px solid black;
   border-collapse: collapse;
 }
+table{
+  margin: auto;
+}
+.searching{
+  margin: 10px;
+  width: 200px;
+  padding: 5px;
+}
