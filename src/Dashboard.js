@@ -2,50 +2,58 @@ import React, { useState } from 'react'
 import bookslist from './Bookslist'
 
 import Formvalidation from './Formvalidation'
+import PaginationComp from './PaginationComp'
 // import './style.scss';
 function Dashboard() {
-
-    const [books, setBooks]= useState(bookslist)  
+    const [books, setBooks]= useState(bookslist) 
+    const [paginatedbooks, setPaginatedbooks]= useState(books.slice(0,10)) 
     const [order,setOrder] = useState("ASC")
     const [search, setSearch]= useState("")
     const [form, setForm]= useState(false)
     const [view, setView]= useState(false) 
-
+    const [page, setPage] = useState(1);
+    const handlePageChange = (event, value) => {
+        // console.log(value);
+        setPage(value);
+        var initialvalue=(value-1)*10
+        // console.log("initial is", initialvalue, books.slice(initialvalue, initialvalue+10));
+        setPaginatedbooks(books.slice(initialvalue, initialvalue+10))
+    };
     
     function sorting(param){        
         if(order=="ASC"){           
             if(param=="publication_year"){
-                var finaldata=[...books].sort((book1, book2)=> book1[param]< book2[param]? -1:1)
+                var finaldata=[...paginatedbooks].sort((book1, book2)=> book1[param]< book2[param]? -1:1)
             }
             else{
-            var finaldata=[...books].sort((book1, book2)=> book1[param].toLowerCase()< book2[param].toLowerCase()? -1:1)
+            var finaldata=[...paginatedbooks].sort((book1, book2)=> book1[param].toLowerCase()< book2[param].toLowerCase()? -1:1)
             }
-            setBooks(finaldata)
+            setPaginatedbooks(finaldata)
             setOrder("DSC")
         }      
         if(order=="DSC"){            
             if(param=="publication_year"){
-                var finaldata=[...books].sort((book1, book2)=> book1[param]> book2[param]? -1:1)
+                var finaldata=[...paginatedbooks].sort((book1, book2)=> book1[param]> book2[param]? -1:1)
             }
             else{
-            var finaldata=[...books].sort((book1, book2)=> book1[param].toLowerCase()> book2[param].toLowerCase()? -1:1)
+            var finaldata=[...paginatedbooks].sort((book1, book2)=> book1[param].toLowerCase()> book2[param].toLowerCase()? -1:1)
             }
-            setBooks(finaldata)
+            setPaginatedbooks(finaldata)
             setOrder("ASC")
         }
         
     }
     function handlesearch(e){
         setSearch(e.target.value)
-        const filteredlist=search?[...bookslist].filter(book=>book.title.toLowerCase().includes(search.toLowerCase())): bookslist
+        const filteredlist=search?[...books].filter(book=>book.title.toLowerCase().includes(search.toLowerCase())): bookslist
         console.log(filteredlist);
         setBooks(filteredlist)
     }
     
     function deletedata(index, id){
         alert("Are you sure you want to delete this book?")
-        var finallist=books.filter(eachbook=>eachbook.id!==id )        
-        setBooks(finallist)
+        var finallist=paginatedbooks.filter(eachbook=>eachbook.id!==id )        
+        setPaginatedbooks(finallist)
     }
     
    
@@ -60,7 +68,6 @@ function Dashboard() {
     <div>    
             <input type= "text" className='searching' placeholder='Search by Title' onChange={handlesearch}></input>   
             <button onClick={()=>setForm(true)}>Add book to the below list</button>
-
             {
                  form?                                    
                     <Formvalidation books={books} setBooks={setBooks}/>
@@ -78,7 +85,7 @@ function Dashboard() {
                 </tr>
                 </thead>
                 <tbody>
-                {books.map((book, index)=>
+                {paginatedbooks.map((book, index)=>
                 
                 <tr key={index}> 
                     <td>{book.id}</td>                   
@@ -95,6 +102,7 @@ function Dashboard() {
                 </tbody>
 
             </table>
+            <PaginationComp page={page} handlePageChange={(event, value)=>handlePageChange(event, value)}/>
             
            
         
