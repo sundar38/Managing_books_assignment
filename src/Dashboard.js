@@ -1,10 +1,17 @@
 import React, { useState } from 'react'
 import bookslist from './Bookslist'
+import { Form, Formik, Field, ErrorMessage } from 'formik'
+// import './style.scss';
 function Dashboard() {
+
     const [books, setBooks]= useState(bookslist)  
     const [order,setOrder] = useState("ASC")
     const [search, setSearch]= useState("")
     const [form, setForm]= useState(false)
+    const [view, setView]= useState(false)
+
+    
+
     const [bookdetails, setBookdetails] = useState({
         title: "",
         author: "",
@@ -40,29 +47,19 @@ function Dashboard() {
         console.log(filteredlist);
         setBooks(filteredlist)
     }
-    var dupbooklist=bookslist
+    
     function deletedata(index, id){
-        console.log(index)
-        console.log("id is", id)
-        var finallist=dupbooklist.filter(eachbook=>eachbook.id!==id )
-        dupbooklist=finallist
+        alert("Are you sure you want to delete this book?")
+        var finallist=books.filter(eachbook=>eachbook.id!==id )        
         setBooks(finallist)
     }
-    const handleChange = e => {
-        setBookdetails({
-          ...bookdetails,
-          [e.target.name]: e.target.value,
-        })
-      }
-    function addformdata(){      
-        
-        let obj={            
-                "id": bookslist.length+1, "title": bookdetails.title, "author": bookdetails.author, "publication_year": bookdetails.author, "genre": bookdetails.genre,
-            }
-        console.log(obj);
-        var bookslistafteradd=[...books, obj]
-        setBooks(bookslistafteradd)
-    }
+    
+   
+    // function viewdata(index, book){        
+    //     console.log(book); 
+
+    //     alert("This book `${book.title}` was written by {book.author} published in {book.pub_year} belongs to {book.genre}")
+    // }
     
     
   return (
@@ -71,13 +68,62 @@ function Dashboard() {
             <button onClick={()=>setForm(true)}>Add book to the below list</button>
 
             {
-                form?<div>
-                    <input type='text' placeholder='Enter the title of book'name='title' value={bookdetails.title} onChange={handleChange}></input>
-                    <input type='text' placeholder='Enter the Author of book'name='author' value={bookdetails.author} onChange={handleChange}></input>
-                    <input type='number' placeholder='Enter the Publication Year' name='pub_year' value={bookdetails.pub_year} onChange={handleChange}></input>
-                    <input type='text' placeholder='Enter the Genre of book' name='genre' value={bookdetails.genre}  onChange={handleChange}></input>
-                    <button onClick={addformdata}>Submit</button>
-                </div>:
+                 form?
+                 <div>                   
+                    <Formik
+                        initialValues={{ title: '', author: '', pub_year:0, genre: "" }}
+                        validate={values => {
+                            const errors = {};
+                            if (!values.title) {
+                                errors.title = 'Title field is Required';
+                            }
+                            if(!values.author){
+                                errors.author="Author field is Required";
+                            }
+                            if(!values.pub_year){
+                                errors.pub_year="Publication year field is Required";
+                            }
+                            if(!values.genre){
+                                errors.genre="Genre field is Required";
+                            }
+                            // } else if (
+                            //     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+                            // ) {
+                            //     errors.email = 'Invalid email address';
+                            // }
+                            return errors;
+                        }}
+                        onSubmit={(values, { setSubmitting }) => {                        
+                            let obj={            
+                                "id": books.length+1, "title": values.title, "author": values.author, "publication_year": values.author, "genre": values.genre,
+                            }
+                            console.log(obj);
+                            var bookslistafteradd=[...books, obj]
+                            setBooks(bookslistafteradd)
+                            values.title=""
+                            values.author=""
+                            values.genre=""
+                            values.pub_year=0
+                        }}
+                    >
+                    {({ isSubmitting }) => (
+                        <Form>
+                            <Field type="text" name="title" placeholder="Enter the title of book" /> <br></br>
+                            <ErrorMessage name="title" component="div" className="errormessage" />
+                            <Field type="text" name="author" placeholder="Enter the author of book" /><br></br>
+                            <ErrorMessage name="author" component="div" className="errormessage"/>
+                            <Field type="number" name="pub_year" placeholder="Enter the publication year of book" /><br></br>
+                            <ErrorMessage name="pub_year" component="div" className="errormessage" />
+                            <Field type="text" name="genre" placeholder="Enter the genre of book" /><br></br>
+                            <ErrorMessage name="genre" component="div" className="errormessage" />
+                            <button type="submit" >
+                                Submit
+                            </button>
+                        </Form>
+                    )}
+                    </Formik>
+                </div>
+                 :
                 <div></div>
             }
             <table>
@@ -100,12 +146,15 @@ function Dashboard() {
                     <td>{book.publication_year}</td>
                     <td>{book.genre}</td>
                     <td><button onClick={()=>{ deletedata(index, book.id)}}>Delete</button></td>
+                    {/* <td><button onClick={()=> setView(true)}>View</button></td>
+                    {view?<h1>Hi</h1>:<></>} */}
                 </tr>
                 
                 )}
                 </tbody>
 
             </table>
+            
            
         
     
