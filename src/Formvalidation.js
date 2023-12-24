@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Formik, Field, ErrorMessage } from 'formik'
-function Formvalidation({books, setBooks}) {
+function Formvalidation({books, setPaginatedbooks}) {
   return (
     <div>
         <Formik
@@ -19,11 +19,7 @@ function Formvalidation({books, setBooks}) {
                             if(!values.genre){
                                 errors.genre="Genre field is Required";
                             }
-                            // } else if (
-                            //     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-                            // ) {
-                            //     errors.email = 'Invalid email address';
-                            // }
+                          
                             return errors;
                         }}
                         onSubmit={(values, { setSubmitting }) => {                        
@@ -32,7 +28,7 @@ function Formvalidation({books, setBooks}) {
                             }
                             console.log(obj);
                             var bookslistafteradd=[...books, obj]
-                            setBooks(bookslistafteradd)
+                            setPaginatedbooks(bookslistafteradd)
                             values.title=""
                             values.author=""
                             values.genre=""

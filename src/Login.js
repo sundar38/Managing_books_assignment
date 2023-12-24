@@ -11,6 +11,7 @@ function Login() {
   
   function validatefeilds(e){    
     e.preventDefault() 
+    // validating email and password with regex
     var emailregex= /^[^\s@]+@[^\s@]+\.[^\s@]+$/ 
     var pwregex= /^((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{6,20})$/
     if(emailregex.test(email)== false){
@@ -23,7 +24,7 @@ function Login() {
     else{
       setError("")
       setPwerror("")    
-    
+    // handling unique email id login case
     let matchmail= mailcollect.filter(eachmail=> eachmail==email)    
       if(matchmail==""){   
         mailcollect.push(email)
