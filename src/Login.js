@@ -29,6 +29,7 @@ function Login() {
       if(matchmail==""){   
         mailcollect.push(email)
         setMailcollect(mailcollect)
+       
          navigate("/dashboard")
       }
       else{

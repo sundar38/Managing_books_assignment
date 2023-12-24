@@ -58,8 +58,9 @@ function Dashboard() {
     // handling searching criteria for filter case
     function handlesearch(e){
         setSearch(e.target.value)
-        const filteredlist=search?[...books].filter(book=>book.title.toLowerCase().includes(search.toLowerCase())): books.slice(0,10)
+        const filteredlist=search?[...books].filter(book=>book.title.toLowerCase().includes(search.toLowerCase())): books
         console.log(filteredlist);
+        console.log(search);
         setPaginatedbooks(filteredlist)
       
     }
@@ -96,6 +97,8 @@ function Dashboard() {
             <input type= "text" className='searching' placeholder='Search by Title' onChange={handlesearch}></input>   
             { /*Adding book to the list*/}
             <button onClick={()=>setForm(true)}>Add book to the below list</button> 
+          
+            
             {
                 form?                                    
                     <Formvalidation books={books} setPaginatedbooks={setPaginatedbooks}/>
@@ -137,7 +140,7 @@ function Dashboard() {
                 </tbody>
             </table>
 
-            {/* implementing usecontect hook */}
+            {/* implementing usecontext hook */}
             <UserContext.Provider value={page}>
                 <PaginationComp  handlePageChange={(event, value)=>handlePageChange(event, value)}/>
             </UserContext.Provider>         

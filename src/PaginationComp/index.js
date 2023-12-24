@@ -5,9 +5,8 @@ import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
 import UserContext from '../UserContext';
 
-export default function PaginationComp({  handlePageChange}) { 
-  const page= useContext(UserContext)
-  console.log("inside pagcomp", page);
+export default function PaginationComp({handlePageChange}) { 
+  const page= useContext(UserContext)  
   return (
     <div className='paginationcomp'>
       <Typography>Page: {page}</Typography>
