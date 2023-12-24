@@ -109,10 +109,10 @@ function Dashboard() {
                 <thead>
                 <tr>  
                     <th>Id</th>                
-                    <th onClick={()=> sorting("title")}>Title</th>
-                    <th onClick={()=> sorting("author")}>Author</th>
-                    <th onClick={()=> sorting("publication_year")}>Publication Year</th>
-                    <th onClick={()=> sorting("genre")}>Genre</th>
+                    <th onClick={()=> sorting("title")} style={{cursor: "pointer"}>Title</th>
+                    <th onClick={()=> sorting("author")} style={{cursor: "pointer"}>Author</th>
+                    <th onClick={()=> sorting("publication_year")} style={{cursor: "pointer"}>Publication Year</th>
+                    <th onClick={()=> sorting("genre")} style={{cursor: "pointer"}>Genre</th>
                 </tr>
                 </thead>
                 <tbody>
